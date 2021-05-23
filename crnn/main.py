@@ -7,19 +7,21 @@ from keras import backend as K
 from keras.models import Model
 from keras.layers import Input, Conv2D, MaxPooling2D, Reshape, Bidirectional, LSTM, Dense, Lambda, Activation, BatchNormalization, Dropout
 from keras.optimizers import Adam
+from datetime import datetime
 
+
+args = parse_argument()
 
 ###### Data loading/ Train Test Spliting/ image Loading / alphabet definition / Model parameter definition ###### 
 print('###### Data loading/ Train Test Spliting/ image Loading / alphabet definition / Model parameter definition ###### ')
 print()
 
 # load data 
-data_type_used = 'validated'
-path_to_seg_csv = '2021-04-20_transcriptions_report.csv'
+path_to_seg_csv = 'trained_csv/' + args.trainedfilename
 path_to_bb_segs = 'Transcribed_Segs'
-path_to_iam_csv = '../archive/train_subset.csv'
+path_to_iam_csv = 'train_subset.csv'
 
-df = load_data(data_type_used, path_to_seg_csv,path_to_bb_segs,path_to_iam_csv)
+df = load_data(args.runtype, path_to_seg_csv,path_to_bb_segs,path_to_iam_csv)
 
 sys.stdout.write('Data loaded successfully')
 
@@ -138,22 +140,7 @@ prediction = get_prediction(model,val_imgs,alphabets)
 correct_info = get_prediction_accuracy(prediction, y_val, X_val)
 
 
-while True:	
-	print('Save Model ? Enter True if want to save it')
-	permit = input()
-	if permit == 'True':
-		print('Enter the path where you want to save it, eg: browns_bro/model_v27')
-		path = input()
-		try:
-			model.save(path)
-			print('Model saved successfully')
-			break
-		except:
-			print('something wrong with the path to save model, repeat the process again')
-			print('If want to force the program to end, press ctrl + c')
-	else:
-		if permit == 'False':
-			print('Model not saved. Script ended')
-			break
-		else:
-			print("Not a valid option, please enter 'True' or 'False' ")
+# Save model
+
+cur_date = datetime.today().strftime('%Y-%m-%d')
+model.save('models/' + cur_date + '_model')

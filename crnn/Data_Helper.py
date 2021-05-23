@@ -7,7 +7,22 @@ from collections import Counter
 from sklearn.model_selection import train_test_split
 import cv2 
 from keras import backend as K
+import argparse
 
+
+def parse_argument():
+  parser = argparse.ArgumentParser(prog='python main.py',
+                                   usage='%(prog)s [-h] [-r <run-type>]',
+                                   description='A CRNN OCR script'
+                                   )
+  parser.add_argument('-r', '--runtype', action='store', required=True,
+                      help="""Type of run desired (Must be one of 'validated', 'validated_onepass', 'validated_iam', 'validated_onepass_iam' , 'onepass_iam')"""
+
+  parser.add_argument('-f', '--trainedfilename', action='store', required=True,
+                      help="""File name of trained data downloaded from transcriber"""
+
+
+  return parser.parse_args()
 
 
 def upload_segs(path, path_to_save_segs):

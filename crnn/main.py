@@ -1,9 +1,6 @@
 import numpy as np
-import pandas as pd 
 from Data_Helper import *
 from crnn_helper import * 
-import tensorflow as tf
-from keras import backend as K
 from keras.models import Model
 from keras.layers import Input, Conv2D, MaxPooling2D, Reshape, Bidirectional, LSTM, Dense, Lambda, Activation, BatchNormalization, Dropout
 from keras.optimizers import Adam
@@ -17,9 +14,10 @@ print('###### Data loading/ Train Test Spliting/ image Loading / alphabet defini
 print()
 
 # load data 
-path_to_seg_csv = 'trained_csv/' + args.trainedfilename
-path_to_bb_segs = 'Transcribed_Segs'
-path_to_iam_csv = 'train_subset.csv'
+#path_to_seg_csv = 'trained_csv/' + args.trainedfilename
+path_to_seg_csv = '/Volumes/GoogleDrive/My Drive/py/notebooks/NewYorkScapes/' + args.trainedfilename
+path_to_bb_segs = '/Volumes/GoogleDrive/My Drive/py/notebooks/NewYorkScapes/Transcribed_Segs'
+path_to_iam_csv = '/Volumes/GoogleDrive/My Drive/py/notebooks/NewYorkScapes/train_subset.csv'
 
 df = load_data(args.runtype, path_to_seg_csv,path_to_bb_segs,path_to_iam_csv)
 
@@ -124,7 +122,7 @@ print('############ RUN MODEL #########################')
 print()
 # define model parameters
 lr = 0.0001
-epoch_size = 2
+epoch_size = args.numepochs
 batch_size = 64
 
 # the loss calculation occurs elsewhere, so we use a dummy lambda function for the loss
@@ -143,4 +141,4 @@ correct_info = get_prediction_accuracy(prediction, y_val, X_val)
 # Save model
 
 cur_date = datetime.today().strftime('%Y-%m-%d')
-model.save('models/' + cur_date + '_model')
+model.save('models/' + cur_date + '_' + args.runtype + '_model')

@@ -5,8 +5,7 @@ import sys
 import urllib.request
 from collections import Counter
 from sklearn.model_selection import train_test_split
-import cv2 
-from keras import backend as K
+import cv2
 import argparse
 
 
@@ -17,10 +16,13 @@ def parse_argument():
                                    )
   parser.add_argument('-r', '--runtype', action='store', required=True,
                       help="""Type of run desired (Must be one of 'validated', 'validated_onepass', 'validated_iam', 'validated_onepass_iam' , 'onepass_iam')"""
+                      )
 
   parser.add_argument('-f', '--trainedfilename', action='store', required=True,
                       help="""File name of trained data downloaded from transcriber"""
+                      )
 
+  parser.add_argument('-e', '--numepochs', action='store', required=True, help="""Number of epochs to be deployed in run""")
 
   return parser.parse_args()
 

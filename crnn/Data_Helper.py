@@ -5,7 +5,7 @@ import sys
 import urllib.request
 from collections import Counter
 from sklearn.model_selection import train_test_split
-from cv2 import cv2
+import cv2
 import argparse
 
 

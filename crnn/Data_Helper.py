@@ -159,52 +159,52 @@ def load_data(data_type_used,path_to_seg_csv,path_to_bb_segs,path_to_iam_csv = N
 
 
 def data_train_val_split(df,IAM_USED = False, test_size = 0.1, random_state = 42 ):
-	  '''
-	  @Params:
-	   IAM_USED: Boolean: if iam data used, IAM_USED = True
-	   df: pd.DataFrame() where it contains all segment_id and label
-	   test_size: float, fraction of data used for validation set 
-	   random_state: default = 42, used to track the ramdom split data.
+    '''
+    @Params:
+     IAM_USED: Boolean: if iam data used, IAM_USED = True
+     df: pd.DataFrame() where it contains all segment_id and label
+     test_size: float, fraction of data used for validation set
+     random_state: default = 42, used to track the ramdom split data.
 
-	  @Return:
-	    X_train, X_val, y_train, y_val
-	  '''
+    @Return:
+      X_train, X_val, y_train, y_val
+    '''
 
-  	  # split train/val/test
+    # split train/val/test
 
-	  X_train, X_val, y_train, y_val  = train_test_split(
-	  df['segment_id'], df['label'], test_size=test_size, random_state= random_state)
+    X_train, X_val, y_train, y_val  = train_test_split(
+    df['segment_id'], df['label'], test_size=test_size, random_state= random_state)
 
-	  sys.stdout.write('training sample size: {}'.format(X_train.size))
-	  sys.stdout.write('\n')
-	  sys.stdout.write('Vallidation sample size: {}'.format(X_val.size))
-	  sys.stdout.write('\n')
-	  if True:
-	    train_iam = 0
-	    train_validated = 0
-	    val_iam = 0
-	    val_validated = 0
-	    for train_file in X_train:
-	      if str(train_file).isdigit():
-	        train_validated += 1
-	      else:
-	        train_iam += 1
-	    for val_file in X_val:
-	      if str(val_file).isdigit():
-	        val_validated += 1
-	      else:
-	        val_iam += 1
-	  sys.stdout.write('train_iam: {}'.format(train_iam))
-	  sys.stdout.write('\n')
-	  sys.stdout.write('train_validated: {}'.format(train_validated))
-	  sys.stdout.write('\n')
-	  sys.stdout.write('val_iam: {}'.format(val_iam))
-	  sys.stdout.write('\n')
-	  sys.stdout.write('val_validated: {}'.format(val_validated) )
-	  sys.stdout.write('\n')
+    sys.stdout.write('training sample size: {}'.format(X_train.size))
+    sys.stdout.write('\n')
+    sys.stdout.write('Vallidation sample size: {}'.format(X_val.size))
+    sys.stdout.write('\n')
+    if True:
+      train_iam = 0
+      train_validated = 0
+      val_iam = 0
+      val_validated = 0
+      for train_file in X_train:
+        if str(train_file).isdigit():
+          train_validated += 1
+        else:
+          train_iam += 1
+      for val_file in X_val:
+        if str(val_file).isdigit():
+          val_validated += 1
+        else:
+          val_iam += 1
+    sys.stdout.write('train_iam: {}'.format(train_iam))
+    sys.stdout.write('\n')
+    sys.stdout.write('train_validated: {}'.format(train_validated))
+    sys.stdout.write('\n')
+    sys.stdout.write('val_iam: {}'.format(val_iam))
+    sys.stdout.write('\n')
+    sys.stdout.write('val_validated: {}'.format(val_validated) )
+    sys.stdout.write('\n')
 
 
-	  return X_train, X_val, y_train, y_val
+    return X_train, X_val, y_train, y_val
 
 
 def get_stats_discrepancy(path):

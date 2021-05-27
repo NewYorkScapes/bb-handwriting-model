@@ -110,7 +110,7 @@ def get_prediction(model,list_imgs,alphabets):
   return prediction
 
 
-def get_prediction_accuracy(prediction, y_true, X_val):
+def get_prediction_accuracy(prediction, y_true, X_val, final_report):
   '''
   @params:
   prediction: prediction made by model 
@@ -142,5 +142,7 @@ def get_prediction_accuracy(prediction, y_true, X_val):
         correct_info[X_val[i]] = {'predicted':pr,'label':tr}
   print('Correct characters predicted : %.2f%%' %(correct_char*100/total_char))
   print('Correct words predicted      : %.2f%%' %(correct*100/len(X_val)))
+  final_report = final_report + 'Correct characters predicted : %.2f%%' %(correct_char*100/total_char) + '\n'
+  final_report = final_report + 'Correct words predicted      : %.2f%%' %(correct*100/len(X_val)) + '\n'
 
-  return correct_info
+  return correct_info, final_report

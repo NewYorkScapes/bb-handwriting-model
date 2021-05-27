@@ -15,10 +15,11 @@ print('###### Data loading/ Train Test Spliting/ image Loading / alphabet defini
 print()
 
 # load data 
-path_to_seg_csv = '../data/' + args.trainedfilename
-path_to_bb_segs = '../data/Transcribed_Segs'
-path_to_iam_csv = '../data/iam_train_subset.csv'
-path_to_iam_segs = '../data/iam_train_subset'
+main_path = '/scratch/nmw2/bb-handwriting-model/'
+path_to_seg_csv = main_path + 'data/' + args.trainedfilename
+path_to_bb_segs = main_path + 'data/Transcribed_Segs'
+path_to_iam_csv = main_path + 'data/iam_train_subset.csv'
+path_to_iam_segs = main_path + 'data/iam_train_subset'
 
 df = load_data(args.runtype, path_to_seg_csv,path_to_bb_segs,path_to_iam_csv)
 

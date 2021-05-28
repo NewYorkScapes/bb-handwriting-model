@@ -295,11 +295,11 @@ def load_imgs(img_id_list, path_to_bb_segs, path_to_iam_segs, max_width = 256, m
       if i % 200 == 0:
         sys.stdout.write('{} out of {} done'.format(i,len(img_id_list)))
         sys.stdout.write('\n')
-      if str(idx).isdigit():
-        img_dir = '{}/{}.jpg'.format(path_to_bb_segs, idx)
+      if str(idx)[0] == 'T':
+        img_dir = '{}/{}'.format(path_to_iam_segs, idx)
         image = cv2.imread(img_dir, cv2.IMREAD_GRAYSCALE)
       else:
-        img_dir = '{}/{}'.format(path_to_iam_segs,idx)
+        img_dir = '{}/{}'.format(path_to_bb_segs, idx)
         image = cv2.imread(img_dir, cv2.IMREAD_GRAYSCALE)
 
       if image is None:

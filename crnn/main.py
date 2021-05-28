@@ -143,8 +143,8 @@ correct_info, final_report = get_prediction_accuracy(prediction, y_val, X_val, f
 if len(correct_info):
     final_report = final_report + 'List of correctly predicted words: \n'
     for i in correct_info:
-        print('predicted: ', i['predicted'], '| label: ', i['label'])
-        final_report = final_report + 'predicted: ' + i['predicted'] + '| label: ' + i['label'] +  '\n'
+        print('predicted: ', correct_info[i]['predicted'], '| label: ', correct_info[i]['label'])
+        final_report = final_report + 'predicted: ' + correct_info[i]['predicted'] + '| label: ' + correct_info[i]['label'] +  '\n'
 
 # Save model
 
@@ -152,5 +152,6 @@ cur_date = datetime.today().strftime('%Y-%m-%d')
 model.save('models/' + cur_date + '_' + args.runtype + '_model')
 with open('run_summaries.txt', 'a') as f:
     f.write(cur_date + '\n')
+    f.write('Run type: ' + args.runtype + '\n'  )
     f.write(final_report + '----------------\n\n')
     f.close()

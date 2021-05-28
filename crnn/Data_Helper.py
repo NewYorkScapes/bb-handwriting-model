@@ -93,7 +93,7 @@ def load_data(data_type_used,path_to_seg_csv,path_to_bb_segs,path_to_iam_csv = N
     df = pd.DataFrame()
     # groupby segment_id and check every segment with > 1 transcription and there is no discrepancy among transcription. 
     # Note that if transcription = 3 and two transcriptions are the same, this does not count for discrepancy. Same apply to all other segments. 
-    transcription_by_id = transcribe_df.groupby('segment_id')['transcription'].apply(list)
+    transcription_by_id = transcribe_df.groupby('filename')['transcription'].apply(list)
     seg_id = []
     seg_val = []
     for idx in transcription_by_id.index:
@@ -104,52 +104,52 @@ def load_data(data_type_used,path_to_seg_csv,path_to_bb_segs,path_to_iam_csv = N
     sys.stdout.write('We have {} validated data'.format(len(seg_id)))
     sys.stdout.write('\n')
 
-    df['segment_id'] = seg_id
+    df['filename'] = seg_id
     df['label'] = seg_val
 
   if 'onepass' in data_type_used:
-    transcription_by_id = transcribe_df.groupby('segment_id')['transcription'].apply(list)
+    transcription_by_id = transcribe_df.groupby('filename')['transcription'].apply(list)
     # select one pass segs
     one_pass_idlist = []
     for idx in transcription_by_id.index:
       if len(transcription_by_id[idx]) == 1:
           one_pass_idlist += [idx]
 
-    one_pass_df = transcribe_df[transcribe_df['segment_id'].isin(one_pass_idlist )]
-    one_pass_df = one_pass_df[['segment_id', 'transcription']]
-    one_pass_df.columns = ['segment_id','label']
+    one_pass_df = transcribe_df[transcribe_df['filename'].isin(one_pass_idlist )]
+    one_pass_df = one_pass_df[['filename', 'transcription']]
+    one_pass_df.columns = ['filename','label']
     
     sys.stdout.write('We have {} one pass data'.format(len(one_pass_df)))
     sys.stdout.write('\n')
     if df_exist == True:
       df = pd.concat([df,one_pass_df])
-      df = df[['segment_id', 'label']]
+      df = df[['filename', 'label']]
     else:
       df = one_pass_df
 
   # need to delete rows where image files are not in folder 
   all_img_files = os.listdir(path_to_bb_segs)
   segs_not_in_folder  = 0
-  for seg_id in df['segment_id'].unique():
-    seg_id_str = str(seg_id) +'.jpg'
-    if seg_id_str not in all_img_files:
+  for seg_id in df['filename'].unique():
+    if seg_id not in all_img_files:
       segs_not_in_folder += 1
-      df = df[df['segment_id'] != seg_id]
+      df = df[df['filename'] != seg_id]
   sys.stdout.write('Segs not in folder: {}'.format(segs_not_in_folder))
   sys.stdout.write('\n')
 
   if 'iam' in data_type_used:
-    iam_df = pd.read_csv('../archive/train_subset.csv')
+    iam_df = pd.read_csv(path_to_iam_csv)
     iam_df.columns = ['	Unnamed: 0','segment_id','label']
     # pick a subset of iam_df with len(iam) = len(validated_df)
     iam_df = iam_df.iloc[:len(df)]
     iam_df = iam_df[['segment_id','label']]
+    iam_df.columns = ['filename', 'label']
     sys.stdout.write('We have {} iam data'.format(len(iam_df)))
     sys.stdout.write('\n')
     df = pd.concat([df,iam_df])
 
   # NO repeated segment_id is allowed 
-  assert len(df['segment_id'].unique()) == len(df)
+  assert len(df['filename'].unique()) == len(df)
 
   sys.stdout.write('Total # of data in our df: {}'.format(len(df)))
   sys.stdout.write('\n')
@@ -173,7 +173,7 @@ def data_train_val_split(df,IAM_USED = False, test_size = 0.1, random_state = 42
     # split train/val/test
 
     X_train, X_val, y_train, y_val  = train_test_split(
-    df['segment_id'], df['label'], test_size=test_size, random_state= random_state)
+    df['filename'], df['label'], test_size=test_size, random_state= random_state)
 
     sys.stdout.write('training sample size: {}'.format(X_train.size))
     sys.stdout.write('\n')
@@ -220,7 +220,7 @@ def get_stats_discrepancy(path):
   transcribe_df.dropna(inplace=True,subset=['transcription'])
 
   # multiple passes stats
-  stats = dict(transcribe_df.groupby('segment_id').count()['seg_url'])
+  stats = dict(transcribe_df.groupby('filename').count()['seg_url'])
   stats = pd.Series(stats.values(),index = stats.keys())
   # number of passes
   print('We have this unique number of passes: ', stats.unique() )
@@ -230,7 +230,7 @@ def get_stats_discrepancy(path):
     print()
   
   # discrepancy
-  transcription_by_id = transcribe_df.groupby('segment_id')['transcription'].apply(list)
+  transcription_by_id = transcribe_df.groupby('filename')['transcription'].apply(list)
   # check for discrepancy
   discrepancy_idlist = []
   for idx in transcription_by_id.index:

@@ -21,7 +21,7 @@ path_to_bb_segs = main_path + 'data/Transcribed_Segs'
 path_to_iam_csv = main_path + 'data/iam_train_subset.csv'
 path_to_iam_segs = main_path + 'data/iam_train_subset'
 
-df = load_data(args.runtype, path_to_seg_csv,path_to_bb_segs,path_to_iam_csv)
+df = load_data(args.runtype, path_to_seg_csv,path_to_bb_segs,path_to_iam_csv = path_to_iam_csv)
 
 sys.stdout.write('Data loaded successfully')
 

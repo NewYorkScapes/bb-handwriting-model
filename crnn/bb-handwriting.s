@@ -18,4 +18,4 @@ source /share/apps/anaconda3/2020.07/etc/profile.d/conda.sh;
 conda activate /scratch/nmw2/bb-handwriting-model/penv;
 export PATH=/scratch/nmw2/bb-handwriting-model/penv/bin:$PATH;
 
-python3 /scratch/nmw2/bb-handwriting-model/crnn/main.py -r validated -f 2021-04-28_transcriptions_report.csv -e 60
+python3 /scratch/nmw2/bb-handwriting-model/crnn/main.py -r validated -f 2021-05-28_transcriptions_report.csv -e 60

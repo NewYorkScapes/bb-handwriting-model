@@ -150,7 +150,7 @@ if len(correct_info):
 
 cur_date = datetime.today().strftime('%Y-%m-%d')
 model.save('models/' + cur_date + '_' + args.runtype + '_model')
-with open('run_summaries.txt', 'a') as f:
+with open('run_summaries/run_summaries.txt', 'a') as f:
     f.write(cur_date + '\n')
     f.write('Run type: ' + args.runtype + '\n'  )
     f.write(final_report + '----------------\n\n')

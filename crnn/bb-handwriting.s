@@ -7,7 +7,7 @@
 #SBATCH --job-name=brownbros_handwriting
 #SBATCH --mail-type=END
 #SBATCH --mail-user=nmw2@nyu.edu
-#SBATCH --output=brownbros_handwriting_%j.out
+#SBATCH --output=run_summaries/brownbros_handwriting_%j.out
 #SBATCH --array=0-4
 
 module purge;

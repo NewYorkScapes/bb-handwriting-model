@@ -10,7 +10,8 @@ from datetime import datetime
 args = parse_argument()
 final_report = ''
 
-###### Data loading/ Train Test Spliting/ image Loading / alphabet definition / Model parameter definition ###### 
+###### Data loading/ Train Test Spliting/ image Loading / alphabet definition / Model parameter definition ######
+print('>> THIS IS A ', args.runtype.upper(), ' RUN <<\n\n')
 print('###### Data loading/ Train Test Spliting/ image Loading / alphabet definition / Model parameter definition ###### ')
 print()
 
@@ -152,6 +153,6 @@ cur_date = datetime.today().strftime('%Y-%m-%d')
 model.save('models/' + cur_date + '_' + args.runtype + '_model')
 with open('run_summaries/run_summaries.txt', 'a') as f:
     f.write(cur_date + '\n')
-    f.write('Run type: ' + args.runtype + '\n'  )
+    f.write('Run type: ' + args.runtype.upper() + '\n'  )
     f.write(final_report + '----------------\n\n')
     f.close()

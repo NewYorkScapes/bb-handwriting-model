@@ -128,7 +128,13 @@ def get_prediction_accuracy(prediction, y_true, X_val, final_report):
   for i in range(len(prediction)):
       pr = prediction[i]
       tr = y_true[i]
-      total_char += len(tr)
+      try:
+        total_char += len(tr)
+        # Some characters are somehow turning up as floats (probably the fractions?) so they don't have a length.
+        # I punt here and add a single character to length to check just so that next section won't fail.
+        # Since the character is unusual (a float or non-alphanumeric character) it should be skipped anyway as an incorrect label
+      except:
+        total_char +=1
       
       for j in range(min(len(tr), len(pr))):
           if tr[j] == pr[j]:
@@ -136,10 +142,10 @@ def get_prediction_accuracy(prediction, y_true, X_val, final_report):
               if i not in corr_char_segid:
                 corr_char_segid += [i]
       if pr == tr :
-          correct += 1 
-      # record any correct predicted letter/symbol/number
-      if i in corr_char_segid:
-        correct_info[X_val[i]] = {'predicted':pr,'label':tr}
+          correct += 1
+          # record any correct predicted full word
+          correct_info[X_val[i]] = {'predicted': pr, 'label': tr}
+
   print('Correct characters predicted : %.2f%%' %(correct_char*100/total_char))
   print('Correct words predicted      : %.2f%%' %(correct*100/len(X_val)))
   final_report = final_report + 'Correct characters predicted : %.2f%%' %(correct_char*100/total_char) + '\n'

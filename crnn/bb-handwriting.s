@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
 #SBATCH --time=70:00:00
-#SBATCH --mem=16GB
+#SBATCH --mem=4GB
 #SBATCH --job-name=brownbros_handwriting
 #SBATCH --mail-type=END
 #SBATCH --mail-user=nmw2@nyu.edu
@@ -19,8 +19,7 @@ source /share/apps/anaconda3/2020.07/etc/profile.d/conda.sh;
 conda activate /scratch/nmw2/bb-handwriting-model/penv;
 export PATH=/scratch/nmw2/bb-handwriting-model/penv/bin:$PATH;
 
-runopts=(validated validated_onepass validated_iam validated_onepass_iam 
-onepass_iam)
+runopts=(validated validated_onepass validated_iam validated_onepass_iam onepass_iam)
 
 rtype=${runopts[$SLURM_ARRAY_TASK_ID]}
 

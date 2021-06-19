@@ -130,17 +130,19 @@ def get_prediction_accuracy(prediction, y_true, X_val, final_report):
       tr = y_true[i]
       try:
         total_char += len(tr)
-        # Some characters are somehow turning up as floats (probably the fractions?) so they don't have a length.
-        # I punt here and add a single character to length to check just so that next section won't fail.
+        # Some characters are somehow turning up as floats (numbers? the fractions?) so they don't have a length.
+        # I punt here and add a single character to length to total count just to keep numbers accurate.
         # Since the character is unusual (a float or non-alphanumeric character) it should be skipped anyway as an incorrect label
       except:
         total_char +=1
-      
-      for j in range(min(len(tr), len(pr))):
-          if tr[j] == pr[j]:
-              correct_char += 1
-              if i not in corr_char_segid:
-                corr_char_segid += [i]
+      try:
+          for j in range(min(len(tr), len(pr))):
+              if tr[j] == pr[j]:
+                  correct_char += 1
+                  if i not in corr_char_segid:
+                    corr_char_segid += [i]
+      except:
+          print("An unusual character was found in the 'true value': ", tr)
       if pr == tr :
           correct += 1
           # record any correct predicted full word

@@ -3,7 +3,7 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --cpus-per-task=1
 #SBATCH --time=70:00:00
-#SBATCH --mem=4GB
+#SBATCH --mem=8GB
 #SBATCH --job-name=brownbros_handwriting
 #SBATCH --mail-type=END
 #SBATCH --mail-user=nmw2@nyu.edu
@@ -23,4 +23,4 @@ runopts=(validated validated_onepass validated_iam validated_onepass_iam onepass
 
 rtype=${runopts[$SLURM_ARRAY_TASK_ID]}
 
-python3 /scratch/nmw2/bb-handwriting-model/crnn/main.py -r $rtype -f 2021-05-28_transcriptions_report.csv -e 60
+python3 /scratch/nmw2/bb-handwriting-model/crnn/main.py -r $rtype -f 2021-08-18_transcriptions_report.csv -e 60

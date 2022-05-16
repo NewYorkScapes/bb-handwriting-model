@@ -12,7 +12,7 @@
 #SBATCH --mail-user=<YOUR EMAIL>
 
 module load cuda/11.3.1
-singularity exec --nv --overlay /scratch/yw3076/overlay-50G-10M.ext3:ro /scratch/work/public/singularity/cuda11.3.0-cudnn8-devel-ubuntu20.04.sif /bin/bash -c "
+singularity exec --nv --overlay $SCRATCH/overlay-50G-10M.ext3:ro /scratch/work/public/singularity/cuda11.3.0-cudnn8-devel-ubuntu20.04.sif /bin/bash -c "
 
 source /ext3/env.sh
 conda activate ds

@@ -191,7 +191,7 @@ if len(correct_info):
 # Save model
 
 cur_date = datetime.today().strftime('%Y-%m-%d')
-model.save('models/' + cur_date + '_' + args.runtype + 'enriched_model22')
+model.save('models/' + cur_date + '_' + args.runtype + 'model')
 with open(f'run_summaries/{cur_date}_summaries.txt', 'a') as f:
     f.write(cur_date + '\n')
     f.write('Run type: ' + args.runtype.upper() + '\n'  )

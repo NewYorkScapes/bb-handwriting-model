@@ -1,5 +1,5 @@
 # NewYorkScapes Brown Brothers NYPL Collection Handwritten Text OCR CNN/RNN Models
-This branch was created by Ying Wang (yw3076@nyu.edu), built on the previous work of Hong Gong ([https://github.com/TRokieG](TRokieG)) and Lizhong Wang ([https://github.com/Lizhong1024](Lizhong1024)). Porject website is available at [https://brownbros.newyorkscapes.org/](https://brownbros.newyorkscapes.org).
+This branch was created by [Ying Wang](https://github.com/YingWANGG) (yw3076@nyu.edu), built on the previous work of [Hong Gong](https://github.com/TRokieG) and [Lizhong Wang](https://github.com/Lizhong1024). Porject website is available at [https://brownbros.newyorkscapes.org/](https://brownbros.newyorkscapes.org).
 
 ## How to run the code on NYU HPC with GPU
 

@@ -9,7 +9,7 @@
 #SBATCH --mem=64G
 #SBATCH -c 4
 #SBATCH --mail-type=ALL
-#SBATCH --mail-user=yw3076@nyu.edu
+#SBATCH --mail-user=<YOUR EMAIL>
 
 module load cuda/11.3.1
 singularity exec --nv --overlay /scratch/yw3076/overlay-50G-10M.ext3:ro /scratch/work/public/singularity/cuda11.3.0-cudnn8-devel-ubuntu20.04.sif /bin/bash -c "
@@ -17,5 +17,5 @@ singularity exec --nv --overlay /scratch/yw3076/overlay-50G-10M.ext3:ro /scratch
 source /ext3/env.sh
 conda activate ds
 
-python3 /scratch/yw3076/bb-handwriting-model/crnn/main.py -r validated_onepass -f 2022-03-28_transcriptions_report.csv -e 200"
+python3 $SCRATCH/bb-handwriting-model/crnn/main.py -r validated_onepass -f 2022-03-28_transcriptions_report.csv -e 200"
 

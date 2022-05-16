@@ -1,10 +1,6 @@
 import numpy as np
-import pandas as pd
-from sklearn.model_selection import train_test_split
 from collections import Counter
-import cv2 
-from keras import backend as K
-
+from tensorflow.keras import backend as K
 
 def label_to_num(label,alphabets):
     label_num = []
@@ -17,7 +13,7 @@ def num_to_label(num,alphabets):
     ret = ""
     for ch in num:
         if ch == -1:  # CTC Blank
-            break
+            continue
         else:
             ret+=alphabets[ch]
     return ret
@@ -32,7 +28,7 @@ def ctc_lambda_func(args):
     return K.ctc_batch_cost(labels, y_pred, input_length, label_length)
 
 
-def get_alphabets(y_train, y_val, use_basic_alphabet = True):
+def get_alphabets(y_train, use_basic_alphabet = True):
   '''
   @params:
     y_train: labels for training data 
@@ -45,8 +41,6 @@ def get_alphabets(y_train, y_val, use_basic_alphabet = True):
   # here it includes all possible alphabets
   all_string = ''
   for string in y_train:
-    all_string += str(string)
-  for string in y_val:
     all_string += str(string)
     
   sort_chars = Counter(all_string).most_common()
@@ -112,8 +106,23 @@ def get_prediction(model,list_imgs,alphabets):
 
   return prediction
 
+def cer(s1, s2):
+    if len(s1) > len(s2):
+        s1, s2 = s2, s1
 
-def get_prediction_accuracy(prediction, y_true, X_val):
+    distances = range(len(s1) + 1)
+    for i2, c2 in enumerate(s2):
+        distances_ = [i2+1]
+        for i1, c1 in enumerate(s1):
+            if c1 == c2:
+                distances_.append(distances[i1])
+            else:
+                distances_.append(1 + min((distances[i1], distances[i1 + 1], distances_[-1])))
+        distances = distances_
+    cer = distances[-1] / len(s2)
+    return cer
+
+def get_prediction_accuracy(prediction, y_true, X_val, final_report):
   '''
   @params:
   prediction: prediction made by model 
@@ -126,24 +135,40 @@ def get_prediction_accuracy(prediction, y_true, X_val):
   correct_char = 0
   total_char = 0
   correct = 0
+  edit_distance_total = 0
   corr_char_segid = []
   correct_info = {}
   for i in range(len(prediction)):
       pr = prediction[i]
       tr = y_true[i]
-      total_char += len(tr)
-      
-      for j in range(min(len(tr), len(pr))):
-          if tr[j] == pr[j]:
-              correct_char += 1
-              if i not in corr_char_segid:
-                corr_char_segid += [i]
+      edit_distance = cer(pr, tr) * 100
+      edit_distance_total += edit_distance
+      print(pr, '|', tr, edit_distance)
+      try:
+        total_char += len(tr)
+        # Some characters are somehow turning up as floats (numbers? the fractions?) so they don't have a length.
+        # I punt here and add a single character to length to total count just to keep numbers accurate.
+        # Since the character is unusual (a float or non-alphanumeric character) it should be skipped anyway as an incorrect label
+      except:
+        total_char +=1
+      try:
+          for j in range(min(len(tr), len(pr))):
+              if tr[j] == pr[j]:
+                  correct_char += 1
+                  if i not in corr_char_segid:
+                    corr_char_segid += [i]
+      except:
+          print("An unusual character was found in the 'true value': ", tr)
       if pr == tr :
-          correct += 1 
-      # record any correct predicted letter/symbol/number
-      if i in corr_char_segid:
-        correct_info[X_val[i]] = {'predicted':pr,'label':tr}
+          correct += 1
+          # record any correct predicted full word
+          correct_info[X_val[i]] = {'predicted': pr, 'label': tr}
+
   print('Correct characters predicted : %.2f%%' %(correct_char*100/total_char))
   print('Correct words predicted      : %.2f%%' %(correct*100/len(X_val)))
-
-  return correct_info
+  print('Average edit distance      : %.2f%%' % (edit_distance_total/ len(X_val)))
+  final_report += 'Correct characters predicted : %.2f%%' %(correct_char*100/total_char) + '\n'
+  final_report += 'Correct words predicted      : %.2f%%' %(correct*100/len(X_val)) + '\n'
+  final_report += 'Average edit distance     : %.2f%%' % (edit_distance_total/ len(X_val)) + '\n'
+  
+  return correct_info, final_report
